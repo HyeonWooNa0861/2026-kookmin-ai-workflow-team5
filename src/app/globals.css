@@ -417,6 +417,7 @@ p {
   outline-offset: 4px;
 }
 
+.chartScrollViewport .candleChart,
 .chartScrollViewport .dataPointChart {
   margin-top: 0;
   min-width: 100%;
@@ -485,6 +486,7 @@ p {
   fill: var(--muted);
 }
 
+.candleChart .axisLabel,
 .dataPointChart .axisLabel {
   fill: var(--muted);
   font-size: 11px;
