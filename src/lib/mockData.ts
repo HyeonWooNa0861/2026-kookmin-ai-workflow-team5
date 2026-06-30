@@ -80,11 +80,11 @@ function createCandles(points: ClosePoint[], spread: number): CandlePoint[] {
 export type FearGreedLevel = "extreme-fear" | "fear" | "neutral" | "greed" | "extreme-greed";
 
 export const fearGreedIndex = {
-  value: 20,
-  level: "extreme-fear" as FearGreedLevel,
-  label: "극도 공포",
+  value: 62,
+  level: "greed" as FearGreedLevel,
+  label: "탐욕",
   updatedAt: "2026-06-30",
-  description: "시장이 극도 공포 구간입니다. 투매 국면일 수 있어 역발상 매수 기회를 검토할 수 있습니다."
+  description: "투자자 심리가 탐욕 구간에 진입했습니다. 과열 여부를 함께 확인하세요."
 };
 
 export const marketIndex = {

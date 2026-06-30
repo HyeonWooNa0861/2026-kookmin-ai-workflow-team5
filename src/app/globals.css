@@ -517,6 +517,82 @@ p {
   line-height: 1.45;
 }
 
+.fgZoneTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--amber-soft);
+  color: var(--amber);
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+.fgAlert.zoneChanged,
+.fearGreedBlock.zoneChanged {
+  outline: 2px solid var(--amber);
+}
+
+.fgTable {
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.fgTable th {
+  padding: 5px 6px;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+}
+
+.fgTable td {
+  padding: 5px 6px;
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.fgTable tr:last-child td {
+  border-bottom: none;
+}
+
+.fgScore {
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.fgScore.up { color: var(--green); }
+.fgScore.down { color: var(--red); }
+
+.fgSourceTag {
+  display: inline-flex;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fgSourceTag.real {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.fgSourceTag.estimated {
+  color: var(--muted-strong);
+  background: var(--surface-soft);
+}
+
 .fgAlert {
   display: flex;
   align-items: center;
@@ -538,6 +614,22 @@ p {
 .fgAlertValue {
   font-size: 20px;
   font-weight: 760;
+  white-space: nowrap;
+}
+
+.fgAlertDiff {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fgAlertDiff.up { color: inherit; opacity: 0.9; }
+.fgAlertDiff.down { color: inherit; opacity: 0.9; }
+
+.fgAlertSource {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.6;
   white-space: nowrap;
 }
 
