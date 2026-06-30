@@ -398,8 +398,50 @@ p {
   stroke: var(--muted);
 }
 
-.candleChart.stock .movingAverage {
-  stroke: var(--blue);
+/* 이평선 공통 */
+.candleChart .movingAverage,
+.dataPointChart .movingAverage {
+  stroke-width: 1.5;
+}
+
+/* DataPointChart MA 색상 (5/10/20일) */
+.dataPointChart .movingAverage.ma5  { stroke: var(--blue); }
+.dataPointChart .movingAverage.ma10 { stroke: var(--amber); }
+.dataPointChart .movingAverage.ma20 { stroke: #7c3aed; }
+
+/* DataPointChart MA 범례 */
+.legendLine.ma5  { background: var(--blue); }
+.legendLine.ma10 { background: var(--amber); }
+.legendLine.ma20 { background: #7c3aed; }
+
+/* 골든/데드 크로스 링 마커 */
+.crossDot {
+  fill: none;
+  stroke-width: 2.5;
+}
+.crossDot.golden { stroke: var(--green); }
+.crossDot.dead   { stroke: var(--red); }
+
+/* 추세 필 */
+.trendPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.trendPill.positive { color: var(--green); background: var(--green-soft); }
+.trendPill.negative { color: var(--red);   background: var(--red-soft); }
+.trendPill.neutral  { color: var(--amber); background: var(--amber-soft); }
+
+/* 차트 헤더 우측 (추세필 + 날짜 범위) */
+.chartHeaderRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 .indexSummary,
