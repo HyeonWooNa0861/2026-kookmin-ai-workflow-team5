@@ -1,5 +1,7 @@
 # AWS Charting
 
+**[대시보드 바로가기](https://sigebert111-boot-charting.vercel.app/)** · **[서비스 소개 페이지](./team5.html)**
+
 미국 주식 초보자를 위한 로컬 위험 정보 대시보드입니다. 첫 화면은 loading 상태로 시작하며, 서버 Route Handler가 FRED 지수 데이터, Twelve Data/Alpha Vantage 주가 API, Google News RSS를 조회한 뒤 실데이터만 표시합니다.
 
 ## 주요 기능
