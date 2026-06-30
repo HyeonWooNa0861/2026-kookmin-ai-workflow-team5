@@ -1,11 +1,58 @@
 import type { NewsItem } from "./mockData";
 
-const POSITIVE = ["상승", "호재", "급등", "성장", "회복", "개선", "흑자", "증가", "돌파", "기대", "강세", "반등"];
-const NEGATIVE = ["하락", "악재", "급락", "우려", "부진", "적자", "감소", "둔화", "약세", "위기", "폭락", "하향"];
+const POSITIVE = [
+  "상승",
+  "호재",
+  "급등",
+  "성장",
+  "회복",
+  "개선",
+  "흑자",
+  "증가",
+  "돌파",
+  "기대",
+  "강세",
+  "반등",
+  "gain",
+  "growth",
+  "beat",
+  "beats",
+  "surge",
+  "rally",
+  "strong",
+  "upgrade",
+  "record"
+];
+const NEGATIVE = [
+  "하락",
+  "악재",
+  "급락",
+  "우려",
+  "부진",
+  "적자",
+  "감소",
+  "둔화",
+  "약세",
+  "위기",
+  "폭락",
+  "하향",
+  "fall",
+  "falls",
+  "drop",
+  "drops",
+  "slump",
+  "risk",
+  "concern",
+  "weak",
+  "downgrade",
+  "miss"
+];
 
 function detectSentiment(text: string): { sentiment: NewsItem["sentiment"]; impact: NewsItem["impact"] } {
-  if (POSITIVE.some((kw) => text.includes(kw))) return { sentiment: "positive", impact: "호재" };
-  if (NEGATIVE.some((kw) => text.includes(kw))) return { sentiment: "negative", impact: "악재" };
+  const normalized = text.toLowerCase();
+
+  if (POSITIVE.some((kw) => normalized.includes(kw.toLowerCase()))) return { sentiment: "positive", impact: "호재" };
+  if (NEGATIVE.some((kw) => normalized.includes(kw.toLowerCase()))) return { sentiment: "negative", impact: "악재" };
   return { sentiment: "neutral", impact: "중립" };
 }
 
@@ -65,7 +112,7 @@ function parseRSS(xml: string, prefix: string): NewsItem[] {
       sentiment,
       impact,
       summary: description.slice(0, 120) || title,
-      url,
+      url
     });
   }
 
@@ -73,19 +120,17 @@ function parseRSS(xml: string, prefix: string): NewsItem[] {
 }
 
 async function fetchGoogleNews(query: string, prefix: string): Promise<NewsItem[]> {
-  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ko&gl=KR&ceid=KR:ko`;
+  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`;
   const res = await fetch(url, { next: { revalidate: 600 } });
   if (!res.ok) throw new Error(`Google News 요청 실패: ${query}`);
   const xml = await res.text();
   return parseRSS(xml, prefix).slice(0, 6);
 }
 
-// 체계적 위험: 시장 전체에 영향을 주는 거시경제 뉴스
-export async function fetchSystematicNews(): Promise<NewsItem[]> {
-  return fetchGoogleNews("KOSPI 주식 금리 환율 경제", "sys");
+export async function fetchSystematicNews(query = "S&P 500 interest rates dollar AI semiconductor", prefix = "sys"): Promise<NewsItem[]> {
+  return fetchGoogleNews(query, prefix);
 }
 
-// 비체계적 위험: 종목별 뉴스 (종목명으로 검색)
-export async function fetchUnsystematicNews(stockName: string): Promise<NewsItem[]> {
-  return fetchGoogleNews(`${stockName} 주가`, stockName);
+export async function fetchUnsystematicNews(stockName: string, symbol = stockName): Promise<NewsItem[]> {
+  return fetchGoogleNews(`${stockName} ${symbol} stock`, symbol);
 }

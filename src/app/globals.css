@@ -85,6 +85,7 @@ p {
 }
 
 .demoBadge,
+.dataBadge,
 .pill {
   display: inline-flex;
   align-items: center;
@@ -100,6 +101,42 @@ p {
 .demoBadge {
   color: var(--blue);
   background: var(--blue-soft);
+}
+
+.dataBadge.mock {
+  color: var(--amber);
+  background: var(--amber-soft);
+}
+
+.dataBadge.live,
+.dataBadge.mixed {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.statusActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ghostButton {
+  min-height: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.ghostButton:disabled {
+  cursor: default;
+  opacity: 0.55;
 }
 
 .pill.positive {
@@ -125,6 +162,18 @@ p {
   align-items: stretch;
   padding: 28px 0;
   border-bottom: 1px solid var(--line);
+}
+
+.dataStatus {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  padding: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 680;
+  line-height: 1.5;
 }
 
 .chartBlock,
@@ -208,23 +257,40 @@ p {
   background: var(--blue);
 }
 
-.candleChart {
+.candleChart,
+.lineChart {
   display: block;
   width: 100%;
   margin-top: 18px;
   overflow: visible;
 }
 
-.candleChart .axis {
+.candleChart .axis,
+.lineChart .axis {
   stroke: var(--line-strong);
   stroke-width: 1;
 }
 
-.candleChart .movingAverage {
+.candleChart .movingAverage,
+.lineChart .movingAverage {
   fill: none;
   stroke: var(--blue);
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .indexLine {
+  fill: none;
+  stroke: var(--green);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .lastPoint {
+  fill: var(--surface);
+  stroke: var(--green);
   stroke-width: 3;
 }
 
@@ -253,6 +319,10 @@ p {
 
 .candleChart.stock .movingAverage {
   stroke: var(--blue);
+}
+
+.legendLine.index {
+  background: var(--green);
 }
 
 .indexSummary,
@@ -785,7 +855,8 @@ p {
   .topBar,
   .detailHeader,
   .chartHeader,
-  .sectionHeader {
+  .sectionHeader,
+  .statusActions {
     align-items: flex-start;
     flex-direction: column;
   }
