@@ -1,8 +1,13 @@
 import type { Sentiment } from "./mockData";
 import type { RecommendationStatus } from "./recommendation";
 
-export function formatKRW(value: number) {
-  return `${value.toLocaleString("ko-KR")}원`;
+export function formatUSD(value: number) {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 }
 
 export function formatIndex(value: number) {

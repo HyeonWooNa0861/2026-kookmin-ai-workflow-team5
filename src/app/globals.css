@@ -85,6 +85,7 @@ p {
 }
 
 .demoBadge,
+.dataBadge,
 .pill {
   display: inline-flex;
   align-items: center;
@@ -100,6 +101,42 @@ p {
 .demoBadge {
   color: var(--blue);
   background: var(--blue-soft);
+}
+
+.dataBadge.mock {
+  color: var(--amber);
+  background: var(--amber-soft);
+}
+
+.dataBadge.live,
+.dataBadge.mixed {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.statusActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ghostButton {
+  min-height: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.ghostButton:disabled {
+  cursor: default;
+  opacity: 0.55;
 }
 
 .pill.positive {
@@ -125,6 +162,18 @@ p {
   align-items: stretch;
   padding: 28px 0;
   border-bottom: 1px solid var(--line);
+}
+
+.dataStatus {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  padding: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 680;
+  line-height: 1.5;
 }
 
 .chartBlock,
@@ -208,23 +257,40 @@ p {
   background: var(--blue);
 }
 
-.candleChart {
+.candleChart,
+.lineChart {
   display: block;
   width: 100%;
   margin-top: 18px;
   overflow: visible;
 }
 
-.candleChart .axis {
+.candleChart .axis,
+.lineChart .axis {
   stroke: var(--line-strong);
   stroke-width: 1;
 }
 
-.candleChart .movingAverage {
+.candleChart .movingAverage,
+.lineChart .movingAverage {
   fill: none;
   stroke: var(--blue);
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .indexLine {
+  fill: none;
+  stroke: var(--green);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .lastPoint {
+  fill: var(--surface);
+  stroke: var(--green);
   stroke-width: 3;
 }
 
@@ -253,6 +319,10 @@ p {
 
 .candleChart.stock .movingAverage {
   stroke: var(--blue);
+}
+
+.legendLine.index {
+  background: var(--green);
 }
 
 .indexSummary,
@@ -517,6 +587,251 @@ p {
   line-height: 1.45;
 }
 
+.fgZoneTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--amber-soft);
+  color: var(--amber);
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+.fgAlert.zoneChanged,
+.fearGreedBlock.zoneChanged {
+  outline: 2px solid var(--amber);
+}
+
+.fgTable {
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.fgTable th {
+  padding: 5px 6px;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+}
+
+.fgTable td {
+  padding: 5px 6px;
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.fgTable tr:last-child td {
+  border-bottom: none;
+}
+
+.fgScore {
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.fgScore.up { color: var(--green); }
+.fgScore.down { color: var(--red); }
+
+.fgSourceTag {
+  display: inline-flex;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fgSourceTag.real {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.fgSourceTag.estimated {
+  color: var(--muted-strong);
+  background: var(--surface-soft);
+}
+
+.fgAlert {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-left: 4px solid;
+}
+
+.fgAlertLabel {
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.fgAlertValue {
+  font-size: 20px;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.fgAlertDiff {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fgAlertDiff.up { color: inherit; opacity: 0.9; }
+.fgAlertDiff.down { color: inherit; opacity: 0.9; }
+
+.fgAlertSource {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.fgAlertDesc {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* extreme-fear — 강조: 진한 배경 + 굵은 테두리 */
+.fgAlert.extreme-fear {
+  color: #7f1d1d;
+  background: #fee2e2;
+  border-color: #c0392b;
+  border-left-width: 6px;
+}
+
+/* fear — 중간 강조 */
+.fgAlert.fear {
+  color: #92400e;
+  background: #fff7ed;
+  border-color: var(--amber);
+  border-left-width: 4px;
+}
+
+/* neutral — 낮은 강조 */
+.fgAlert.neutral {
+  color: var(--muted-strong);
+  background: var(--surface-soft);
+  border-color: var(--line-strong);
+  border-left-width: 4px;
+}
+
+/* greed — 중간 강조 */
+.fgAlert.greed {
+  color: #065f46;
+  background: #ecfdf5;
+  border-color: var(--green);
+  border-left-width: 4px;
+}
+
+/* extreme-greed — 강조: 진한 배경 + 굵은 테두리 */
+.fgAlert.extreme-greed {
+  color: #064e3b;
+  background: #d1fae5;
+  border-color: #0a7a54;
+  border-left-width: 6px;
+}
+
+.fearGreedBlock {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.fearGreedTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fearGreedDate {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fearGreedValue {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.fearGreedValue strong {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.fearGreedLabel {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.fearGreedBar {
+  height: 6px;
+  margin: 10px 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.fearGreedBar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.fearGreedDesc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted-strong);
+}
+
+/* extreme-fear: 0–25 */
+.fearGreedBlock.extreme-fear .fearGreedValue strong,
+.fearGreedBlock.extreme-fear .fearGreedLabel { color: #c0392b; }
+.fearGreedBlock.extreme-fear .fearGreedBar span { background: #c0392b; }
+
+/* fear: 26–45 */
+.fearGreedBlock.fear .fearGreedValue strong,
+.fearGreedBlock.fear .fearGreedLabel { color: var(--red); }
+.fearGreedBlock.fear .fearGreedBar span { background: var(--red); }
+
+/* neutral: 46–55 */
+.fearGreedBlock.neutral .fearGreedValue strong,
+.fearGreedBlock.neutral .fearGreedLabel { color: var(--amber); }
+.fearGreedBlock.neutral .fearGreedBar span { background: var(--amber); }
+
+/* greed: 56–75 */
+.fearGreedBlock.greed .fearGreedValue strong,
+.fearGreedBlock.greed .fearGreedLabel { color: var(--green); }
+.fearGreedBlock.greed .fearGreedBar span { background: var(--green); }
+
+/* extreme-greed: 76–100 */
+.fearGreedBlock.extreme-greed .fearGreedValue strong,
+.fearGreedBlock.extreme-greed .fearGreedLabel { color: #0a7a54; }
+.fearGreedBlock.extreme-greed .fearGreedBar span { background: #0a7a54; }
+
 @media (max-width: 980px) {
   .heroGrid,
   .detailGrid,
@@ -540,7 +855,8 @@ p {
   .topBar,
   .detailHeader,
   .chartHeader,
-  .sectionHeader {
+  .sectionHeader,
+  .statusActions {
     align-items: flex-start;
     flex-direction: column;
   }

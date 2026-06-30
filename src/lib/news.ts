@@ -58,7 +58,7 @@ function parseRSS(xml: string, prefix: string): NewsItem[] {
       sentiment: "neutral",
       impact: "중립",
       summary: description.slice(0, 120) || title,
-      url,
+      url
     });
   }
 
@@ -66,7 +66,7 @@ function parseRSS(xml: string, prefix: string): NewsItem[] {
 }
 
 async function fetchGoogleNews(query: string, prefix: string): Promise<NewsItem[]> {
-  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ko&gl=KR&ceid=KR:ko`;
+  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-US&gl=US&ceid=US:en`;
   const res = await fetch(url, { next: { revalidate: 600 } });
   if (!res.ok) throw new Error(`Google News 요청 실패: ${query}`);
   const xml = await res.text();
@@ -81,12 +81,10 @@ async function fetchGoogleNews(query: string, prefix: string): Promise<NewsItem[
   });
 }
 
-// 체계적 위험: 시장 전체에 영향을 주는 거시경제 뉴스
-export async function fetchSystematicNews(): Promise<NewsItem[]> {
-  return fetchGoogleNews("KOSPI 주식 금리 환율 경제", "sys");
+export async function fetchSystematicNews(query = "S&P 500 interest rates dollar AI semiconductor", prefix = "sys"): Promise<NewsItem[]> {
+  return fetchGoogleNews(query, prefix);
 }
 
-// 비체계적 위험: 종목별 뉴스 (종목명으로 검색)
-export async function fetchUnsystematicNews(stockName: string): Promise<NewsItem[]> {
-  return fetchGoogleNews(`${stockName} 주가`, stockName);
+export async function fetchUnsystematicNews(stockName: string, symbol = stockName): Promise<NewsItem[]> {
+  return fetchGoogleNews(`${stockName} ${symbol} stock`, symbol);
 }
