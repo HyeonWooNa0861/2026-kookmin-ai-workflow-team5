@@ -135,17 +135,17 @@ You MUST return EXACTLY 6 items in the "selected" array. No more, no less.
 Respond ONLY with valid JSON in this exact format:
 {
   "selected": [
-    { "number": 2, "impact": "호재", "sentiment": "positive", "summary": "한 문장 요약" },
-    { "number": 5, "impact": "악재", "sentiment": "negative", "summary": "한 문장 요약" },
-    { "number": 8, "impact": "중립", "sentiment": "neutral", "summary": "한 문장 요약" },
-    { "number": 11, "impact": "호재", "sentiment": "positive", "summary": "한 문장 요약" },
-    { "number": 14, "impact": "악재", "sentiment": "negative", "summary": "한 문장 요약" },
-    { "number": 17, "impact": "중립", "sentiment": "neutral", "summary": "한 문장 요약" }
+    { "number": 2, "sentiment": "positive", "summary": "English summary" },
+    { "number": 5, "sentiment": "negative", "summary": "English summary" },
+    { "number": 8, "sentiment": "neutral", "summary": "English summary" },
+    { "number": 11, "sentiment": "positive", "summary": "English summary" },
+    { "number": 14, "sentiment": "negative", "summary": "English summary" },
+    { "number": 17, "sentiment": "neutral", "summary": "English summary" }
   ]
 }
 
-impact must be one of: 호재, 악재, 중립
-sentiment must be one of: positive, negative, neutral`
+sentiment must be exactly one of: positive, negative, neutral
+summary must be English, under 60 characters`
     },
     {
       role: "user",
@@ -154,7 +154,7 @@ sentiment must be one of: positive, negative, neutral`
   ]).catch(() => "");
 
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
-  let parsed: { selected: (Partial<GroqResult> & { number: number })[] };
+  let parsed: { selected: { number: number; sentiment?: string; summary?: string }[] };
   try {
     parsed = JSON.parse(jsonMatch?.[0] ?? '{"selected":[]}');
   } catch {
@@ -166,8 +166,11 @@ sentiment must be one of: positive, negative, neutral`
     selectedIndices: selected.map((r) => r.number - 1),
     results: new Map(
       selected.flatMap((r) => {
-        const normalized = normalizeResult(r);
-        return normalized ? [[r.number - 1, normalized]] : [];
+        if (!isSentiment(r.sentiment) || !r.summary) return [];
+        const impact: GroqResult["impact"] =
+          r.sentiment === "positive" ? "호재" :
+          r.sentiment === "negative" ? "악재" : "중립";
+        return [[r.number - 1, { impact, sentiment: r.sentiment, summary: r.summary.slice(0, 80) }]];
       })
     )
   };
@@ -190,8 +193,8 @@ export async function analyzeStockWithGroq(stock: Stock): Promise<Recommendation
 {
   "status": "관심" 또는 "관망" 또는 "주의",
   "score": 0에서 100 사이 정수,
-  "summary": "50자 이내 한국어 한 문장 종합 분석",
-  "reasons": ["이유1 (30자 이내)", "이유2 (30자 이내)", "이유3 (30자 이내)"]
+  "summary": "한국어 한 문장 종합 분석 (문장이 완결되어야 함)",
+  "reasons": ["완결된 한국어 이유 문장 1", "완결된 한국어 이유 문장 2", "완결된 한국어 이유 문장 3"]
 }
 
 판단 기준:
@@ -239,8 +242,8 @@ ${newsSummaries || "뉴스 없음"}`
     return {
       status: parsed.status,
       score: Math.max(0, Math.min(100, Math.round(parsed.score))),
-      summary: parsed.summary.slice(0, 80),
-      reasons: (parsed.reasons as unknown[]).slice(0, 3).map((r) => String(r).slice(0, 60))
+      summary: parsed.summary,
+      reasons: (parsed.reasons as unknown[]).slice(0, 3).map((r) => String(r))
     };
   } catch {
     return null;
