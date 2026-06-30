@@ -241,13 +241,15 @@ export function StockDetailClient({ symbol }: StockDetailClientProps) {
           />
         </div>
 
-        <div className="volumeSection">
-          <VolumeCard
-            foreign={volume.foreign}
-            individual={volume.individual}
-            institutional={volume.institutional}
-          />
-        </div>
+        {volume && (
+          <div className="volumeSection">
+            <VolumeCard
+              foreign={volume.foreign}
+              individual={volume.individual}
+              institutional={volume.institutional}
+            />
+          </div>
+        )}
       </section>
 
       <NewsList
