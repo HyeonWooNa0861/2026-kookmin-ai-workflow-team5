@@ -77,6 +77,16 @@ function createCandles(points: ClosePoint[], spread: number): CandlePoint[] {
   });
 }
 
+export type FearGreedLevel = "extreme-fear" | "fear" | "neutral" | "greed" | "extreme-greed";
+
+export const fearGreedIndex = {
+  value: 20,
+  level: "extreme-fear" as FearGreedLevel,
+  label: "극도 공포",
+  updatedAt: "2026-06-30",
+  description: "시장이 극도 공포 구간입니다. 투매 국면일 수 있어 역발상 매수 기회를 검토할 수 있습니다."
+};
+
 export const marketIndex = {
   code: "KOSPI",
   name: "KOSPI 종합",

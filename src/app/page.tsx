@@ -2,7 +2,7 @@ import { CandlestickChart } from "@/components/CandlestickChart";
 import { NewsList } from "@/components/NewsList";
 import { StockCard } from "@/components/StockCard";
 import { formatIndex, formatPercent } from "@/lib/format";
-import { marketIndex, stocks, systematicNews } from "@/lib/mockData";
+import { fearGreedIndex, marketIndex, stocks, systematicNews } from "@/lib/mockData";
 import { fetchSystematicNews } from "@/lib/news";
 
 export default async function Home() {
@@ -18,6 +18,12 @@ export default async function Home() {
           <p className="demoBadge">교육용 mock data</p>
         </header>
 
+        <div className={`fgAlert ${fearGreedIndex.level}`} role="status">
+          <span className="fgAlertLabel">{fearGreedIndex.label}</span>
+          <span className="fgAlertValue">{fearGreedIndex.value}</span>
+          <span className="fgAlertDesc">{fearGreedIndex.description}</span>
+        </div>
+
         <section className="heroGrid">
           <CandlestickChart
             points={marketIndex.chart}
@@ -30,6 +36,22 @@ export default async function Home() {
             <strong>{formatIndex(marketIndex.currentValue)}</strong>
             <span className="positiveText">{formatPercent(marketIndex.changePercent)}</span>
             <p>{marketIndex.summary}</p>
+
+            <div className={`fearGreedBlock ${fearGreedIndex.level}`}>
+              <div className="fearGreedTop">
+                <span className="eyebrow">Fear &amp; Greed Index</span>
+                <span className="fearGreedDate">{fearGreedIndex.updatedAt}</span>
+              </div>
+              <div className="fearGreedValue">
+                <strong>{fearGreedIndex.value}</strong>
+                <span className="fearGreedLabel">{fearGreedIndex.label}</span>
+              </div>
+              <div className="fearGreedBar" aria-label={`공포탐욕지수 ${fearGreedIndex.value}`}>
+                <span style={{ width: `${fearGreedIndex.value}%` }} />
+              </div>
+              <p className="fearGreedDesc">{fearGreedIndex.description}</p>
+            </div>
+
             <div className="beginnerNote">
               체계적 위험은 금리, 환율, 수출처럼 여러 종목에 함께 영향을 주는
               시장 공통 요인입니다.
