@@ -17,8 +17,22 @@ type AlphaVantageDailyResponse = {
   Information?: string;
 };
 
+type CandleCacheEntry = {
+  data: CandlePoint[];
+  expiresAt: number;
+};
+
+const candleCache = new Map<string, CandleCacheEntry>();
+const candleCacheTtlMs = 30 * 60 * 1000;
+
 function hasAlphaVantageConfig() {
   return Boolean(process.env.ALPHA_VANTAGE_API_KEY);
+}
+
+export function shouldRequestAlphaVantage(symbol: string) {
+  const cached = candleCache.get(symbol);
+
+  return hasAlphaVantageConfig() && (!cached || cached.expiresAt <= Date.now());
 }
 
 function formatDateLabel(value: string) {
@@ -42,62 +56,81 @@ async function fetchDailyCandles(symbol: string): Promise<CandlePoint[] | null> 
     return null;
   }
 
+  const cached = candleCache.get(symbol);
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.data;
+  }
+
   const url = new URL("https://www.alphavantage.co/query");
   url.searchParams.set("function", "TIME_SERIES_DAILY");
   url.searchParams.set("symbol", symbol);
   url.searchParams.set("outputsize", "compact");
   url.searchParams.set("apikey", process.env.ALPHA_VANTAGE_API_KEY ?? "");
 
-  const response = await fetch(url, {
-    cache: "no-store"
-  });
+  try {
+    const response = await fetch(url, {
+      cache: "no-store"
+    });
 
-  if (!response.ok) {
-    throw new Error(`Alpha Vantage request failed: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Alpha Vantage request failed: ${response.status}`);
+    }
+
+    const payload = (await response.json()) as AlphaVantageDailyResponse;
+
+    if (payload["Error Message"] || payload.Note || payload.Information) {
+      throw new Error(
+        payload["Error Message"] ?? payload.Note ?? payload.Information ?? "Alpha Vantage error"
+      );
+    }
+
+    const rows = payload["Time Series (Daily)"];
+
+    if (!rows) {
+      return cached?.data ?? null;
+    }
+
+    const candles = Object.entries(rows)
+      .map(([date, row]) => {
+        const open = toNumber(row["1. open"]);
+        const high = toNumber(row["2. high"]);
+        const low = toNumber(row["3. low"]);
+        const close = toNumber(row["4. close"]);
+
+        if (!open || !high || !low || !close) {
+          return null;
+        }
+
+        return {
+          label: formatDateLabel(date),
+          open,
+          high,
+          low,
+          close
+        };
+      })
+      .filter((point): point is CandlePoint => Boolean(point))
+      .reverse()
+      .slice(-20);
+
+    if (candles.length === 0) {
+      return cached?.data ?? null;
+    }
+
+    candleCache.set(symbol, {
+      data: candles,
+      expiresAt: Date.now() + candleCacheTtlMs
+    });
+
+    return candles;
+  } catch {
+    return cached?.data ?? null;
   }
-
-  const payload = (await response.json()) as AlphaVantageDailyResponse;
-
-  if (payload["Error Message"] || payload.Note || payload.Information) {
-    throw new Error(
-      payload["Error Message"] ?? payload.Note ?? payload.Information ?? "Alpha Vantage error"
-    );
-  }
-
-  const rows = payload["Time Series (Daily)"];
-
-  if (!rows) {
-    return null;
-  }
-
-  const candles = Object.entries(rows)
-    .map(([date, row]) => {
-      const open = toNumber(row["1. open"]);
-      const high = toNumber(row["2. high"]);
-      const low = toNumber(row["3. low"]);
-      const close = toNumber(row["4. close"]);
-
-      if (!open || !high || !low || !close) {
-        return null;
-      }
-
-      return {
-        label: formatDateLabel(date),
-        open,
-        high,
-        low,
-        close
-      };
-    })
-    .filter((point): point is CandlePoint => Boolean(point))
-    .reverse()
-    .slice(-20);
-
-  return candles.length > 0 ? candles : null;
 }
 
 export async function hydrateStockWithAlphaVantage(stock: Stock): Promise<Stock> {
-  const candles = await fetchDailyCandles(stock.symbol).catch(() => null);
+  const candles = await fetchDailyCandles(stock.symbol);
 
   if (!candles || candles.length === 0) {
     return stock;

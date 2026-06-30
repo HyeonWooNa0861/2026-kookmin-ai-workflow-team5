@@ -1,13 +1,14 @@
 # AWS Charting
 
-미국 주식 초보자를 위한 발표용 로컬 위험 정보 대시보드입니다. 기본값은 mock data이며, API 키를 넣으면 서버 Route Handler가 Alpha Vantage 주가 API와 Google News RSS를 주기적으로 조회합니다.
+미국 주식 초보자를 위한 발표용 로컬 위험 정보 대시보드입니다. 기본값은 mock data이며, 서버 Route Handler가 FRED 지수 데이터, Alpha Vantage 주가 API, Google News RSS를 주기적으로 조회합니다.
 
 ## 주요 기능
 
-- S&P 500 지수 봉차트, 이동평균선, 시장 공통 위험 뉴스
+- FRED 기반 S&P 500 지수 선 그래프, 이동평균선, 시장 공통 위험 뉴스
 - 미국 종목 카드와 비체계적 위험 요약
 - `/stocks/[symbol]` 종목 상세 라우트
 - 종목별 봉차트와 3일 이동평균선
+- FRED CSV 기반 S&P 500 일별 종가 조회
 - Alpha Vantage 기반 미국 주식 일봉 OHLC 조회
 - Google News RSS 기반 뉴스 조회
 - SML, PER, RSI 지표 설명
@@ -26,7 +27,9 @@ cp .env.example .env.local
 ALPHA_VANTAGE_API_KEY=
 ```
 
-Alpha Vantage 키가 없거나 조회에 실패하면 기존 mock data가 표시됩니다. Google News RSS는 별도 API 키가 필요 없습니다. 브라우저는 `/api/market`, `/api/stocks/[symbol]`을 5분 간격으로 다시 조회합니다.
+FRED와 Google News RSS는 별도 API 키가 필요 없습니다. Alpha Vantage 키가 없거나 조회에 실패하면 해당 종목은 기존 mock data가 표시됩니다. 브라우저는 `/api/market`, `/api/stocks/[symbol]`을 1분 간격으로 다시 조회합니다.
+
+외부 조회 제한을 피하기 위해 서버는 FRED S&P 500 종가와 Alpha Vantage 종목별 일봉 OHLC를 각각 30분 동안 메모리에 캐시합니다. 캐시가 만료된 뒤 API 호출이 실패하면 마지막 성공 캐시를 재사용하고, 캐시가 전혀 없을 때만 mock data로 보완합니다. 메인 페이지의 여러 종목 조회는 1.2초 간격으로 순차 처리합니다.
 
 ## 실행 방법
 

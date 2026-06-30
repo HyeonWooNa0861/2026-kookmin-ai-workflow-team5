@@ -13,7 +13,7 @@ type StockDetailClientProps = {
   initialData: StockPayload;
 };
 
-const refreshIntervalMs = 5 * 60 * 1000;
+const refreshIntervalMs = 60 * 1000;
 
 export function StockDetailClient({ initialData }: StockDetailClientProps) {
   const [data, setData] = useState(initialData);

@@ -257,23 +257,40 @@ p {
   background: var(--blue);
 }
 
-.candleChart {
+.candleChart,
+.lineChart {
   display: block;
   width: 100%;
   margin-top: 18px;
   overflow: visible;
 }
 
-.candleChart .axis {
+.candleChart .axis,
+.lineChart .axis {
   stroke: var(--line-strong);
   stroke-width: 1;
 }
 
-.candleChart .movingAverage {
+.candleChart .movingAverage,
+.lineChart .movingAverage {
   fill: none;
   stroke: var(--blue);
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .indexLine {
+  fill: none;
+  stroke: var(--green);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lineChart .lastPoint {
+  fill: var(--surface);
+  stroke: var(--green);
   stroke-width: 3;
 }
 
@@ -302,6 +319,10 @@ p {
 
 .candleChart.stock .movingAverage {
   stroke: var(--blue);
+}
+
+.legendLine.index {
+  background: var(--green);
 }
 
 .indexSummary,

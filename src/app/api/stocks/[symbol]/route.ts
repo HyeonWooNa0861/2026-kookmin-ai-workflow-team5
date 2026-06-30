@@ -19,7 +19,7 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
   return NextResponse.json(payload, {
     headers: {
-      "Cache-Control": "s-maxage=300, stale-while-revalidate=600"
+      "Cache-Control": "no-store"
     }
   });
 }

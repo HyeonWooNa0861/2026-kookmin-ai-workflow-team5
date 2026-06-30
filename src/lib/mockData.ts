@@ -8,6 +8,12 @@ export type CandlePoint = {
   close: number;
 };
 
+export type LinePoint = {
+  label: string;
+  value: number;
+  date?: string;
+};
+
 export type NewsItem = {
   id: string;
   title: string;
@@ -85,21 +91,18 @@ export const marketIndex = {
   updatedAt: "2026-06-30 09:30",
   summary:
     "AI 인프라 투자와 금리 인하 기대가 대형 기술주 중심의 투자심리를 지지한 데모 데이터입니다.",
-  chart: createCandles(
-    [
-      { label: "6/17", close: 5412.8 },
-      { label: "6/18", close: 5398.4 },
-      { label: "6/19", close: 5421.2 },
-      { label: "6/20", close: 5448.6 },
-      { label: "6/23", close: 5460.1 },
-      { label: "6/24", close: 5442.7 },
-      { label: "6/25", close: 5471.3 },
-      { label: "6/26", close: 5480.8 },
-      { label: "6/27", close: 5469.5 },
-      { label: "6/30", close: 5487.03 }
-    ],
-    14
-  )
+  chart: [
+    { label: "6/17", value: 5412.8 },
+    { label: "6/18", value: 5398.4 },
+    { label: "6/19", value: 5421.2 },
+    { label: "6/20", value: 5448.6 },
+    { label: "6/23", value: 5460.1 },
+    { label: "6/24", value: 5442.7 },
+    { label: "6/25", value: 5471.3 },
+    { label: "6/26", value: 5480.8 },
+    { label: "6/27", value: 5469.5 },
+    { label: "6/30", value: 5487.03 }
+  ]
 };
 
 export const systematicNews: NewsItem[] = [

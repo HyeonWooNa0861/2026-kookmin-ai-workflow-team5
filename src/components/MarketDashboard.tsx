@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CandlestickChart } from "@/components/CandlestickChart";
+import { LineChart } from "@/components/LineChart";
 import { NewsList } from "@/components/NewsList";
 import { StockCard } from "@/components/StockCard";
 import { formatIndex, formatPercent } from "@/lib/format";
@@ -11,7 +11,7 @@ type MarketDashboardProps = {
   initialData: MarketPayload;
 };
 
-const refreshIntervalMs = 5 * 60 * 1000;
+const refreshIntervalMs = 60 * 1000;
 
 export function MarketDashboard({ initialData }: MarketDashboardProps) {
   const [data, setData] = useState(initialData);
@@ -77,7 +77,7 @@ export function MarketDashboard({ initialData }: MarketDashboardProps) {
       </section>
 
       <section className="heroGrid">
-        <CandlestickChart
+        <LineChart
           points={data.marketIndex.chart}
           subtitle={`${data.marketIndex.code} - ${data.marketIndex.updatedAt}`}
           title={data.marketIndex.name}
