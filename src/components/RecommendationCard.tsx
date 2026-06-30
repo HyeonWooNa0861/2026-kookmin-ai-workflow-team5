@@ -15,13 +15,13 @@ export function RecommendationCard({ stock, recommendation }: RecommendationCard
   return (
     <aside className="recommendationCard">
       <div className="recommendationTop">
-        <p className="eyebrow">{isAI ? "AI 종목 분석" : "LLM-like 데모 분석"}</p>
+        <p className="eyebrow">{isAI ? "AI 종목 분석" : "규칙 기반 위험 분석"}</p>
         <span className={`pill ${statusClass(result.status)}`}>
           {result.status}
         </span>
       </div>
       <h2>{result.summary}</h2>
-      <div className="scoreBar" aria-label={`분석 점수 ${result.score}점`}>
+      <div className="scoreBar" aria-label={`위험 분석 점수 ${result.score}점`}>
         <span style={{ width: `${result.score}%` }} />
       </div>
       <ul>
@@ -31,7 +31,7 @@ export function RecommendationCard({ stock, recommendation }: RecommendationCard
       </ul>
       {!isAI && (
         <p className="smallNotice">
-          실제 LLM 호출 없이 조회 데이터와 규칙 기반 로직으로 만든 교육용 데모 분석입니다.
+          조회 데이터와 규칙 기반 로직으로 산출한 위험 분석 결과입니다.
         </p>
       )}
     </aside>
