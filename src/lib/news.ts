@@ -31,10 +31,8 @@ function parseRSS(xml: string, prefix: string): NewsItem[] {
     const pubDate = extractTag(content, "pubDate");
     const source = extractTag(content, "source") || "Google 뉴스";
 
-    // 제목에서 " - 출처명" 제거
     const title = rawTitle.replace(/\s+-\s+[^-]+$/, "").trim();
 
-    // description은 HTML 엔티티로 인코딩되어 있으므로 먼저 디코딩 후 태그·URL 제거
     const description = decodeEntities(extractTag(content, "description"))
       .replace(/<[^>]*>/g, "")
       .replace(/https?:\/\/\S+/g, "")
@@ -94,6 +92,7 @@ export async function fetchSystematicNews(_query?: string, prefix = "sys"): Prom
 export async function fetchUnsystematicNews(stockName: string, symbol = stockName): Promise<NewsItem[]> {
   const items = await fetchGoogleNewsRaw(`${stockName} ${symbol} stock`, symbol, 6);
   const analysis = await analyzeNews(items.map((item) => ({ id: item.id, title: item.title }))).catch(() => new Map());
+
   return items.map((item) => {
     const result = analysis.get(item.id);
     if (!result) return item;
