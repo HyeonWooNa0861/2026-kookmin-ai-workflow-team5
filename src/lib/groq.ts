@@ -72,21 +72,16 @@ export async function analyzeNews(
 
   const raw = await callGroq([
     {
-      content: `You classify stock market news for a stock risk dashboard.
-Return only a JSON array. Do not include markdown or extra text.
+      content: `You are a stock news classifier. Return ONLY a valid JSON array. No markdown, no explanation.
 
-[
-  {
-    "id": "news id",
-    "impact": "호재" | "악재" | "중립",
-    "sentiment": "positive" | "negative" | "neutral",
-    "summary": "Korean summary under 40 characters"
-  }
-]`,
+Each object must have exactly these fields:
+- "id": the exact news ID from input (e.g. "AAPL-0")
+- "sentiment": exactly one of "positive", "negative", "neutral"
+- "summary": English summary under 60 characters`,
       role: "system"
     },
     {
-      content: `Classify these news titles:\n\n${numbered}`,
+      content: `Classify each news item below and return a JSON array:\n\n${numbered}`,
       role: "user"
     }
   ]).catch(() => "");
@@ -94,13 +89,16 @@ Return only a JSON array. Do not include markdown or extra text.
   if (!raw) return new Map();
 
   try {
-    const parsed = JSON.parse(raw) as Array<Partial<GroqResult> & { id?: string }>;
+    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const parsed = JSON.parse(jsonMatch?.[0] ?? "[]") as Array<{ id?: string; sentiment?: string; summary?: string }>;
 
     return new Map(
       parsed.flatMap((item) => {
-        if (!item.id) return [];
-        const normalized = normalizeResult(item);
-        return normalized ? [[item.id, normalized]] : [];
+        if (!item.id || !isSentiment(item.sentiment) || !item.summary) return [];
+        const impact: GroqResult["impact"] =
+          item.sentiment === "positive" ? "호재" :
+          item.sentiment === "negative" ? "악재" : "중립";
+        return [[item.id, { impact, sentiment: item.sentiment, summary: item.summary.slice(0, 80) }]];
       })
     );
   } catch {
