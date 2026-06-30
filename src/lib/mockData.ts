@@ -40,6 +40,11 @@ export type StockMetricSet = {
   rsi: {
     value: number;
   };
+  volume: {
+    individual: number;
+    institutional: number;
+    foreign: number;
+  };
 };
 
 export type Stock = {
@@ -190,6 +195,11 @@ export const stocks: Stock[] = [
       },
       rsi: {
         value: 57
+      },
+      volume: {
+        individual: 22,
+        institutional: 58,
+        foreign: 20
       }
     },
     highlights: {
@@ -259,6 +269,11 @@ export const stocks: Stock[] = [
       },
       rsi: {
         value: 61
+      },
+      volume: {
+        individual: 18,
+        institutional: 62,
+        foreign: 20
       }
     },
     highlights: {
@@ -328,6 +343,11 @@ export const stocks: Stock[] = [
       },
       rsi: {
         value: 66
+      },
+      volume: {
+        individual: 35,
+        institutional: 48,
+        foreign: 17
       }
     },
     highlights: {
@@ -397,6 +417,11 @@ export const stocks: Stock[] = [
       },
       rsi: {
         value: 41
+      },
+      volume: {
+        individual: 45,
+        institutional: 38,
+        foreign: 17
       }
     },
     highlights: {

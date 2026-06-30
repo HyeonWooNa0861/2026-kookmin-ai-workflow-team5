@@ -553,6 +553,132 @@ p {
 .trendPill.negative { color: var(--chart-down); background: var(--chart-down-soft); }
 .trendPill.neutral  { color: var(--amber); background: var(--amber-soft); }
 
+/* ── 지표 판정 뱃지 ── */
+.metricValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.metricValueRow strong {
+  font-size: 30px;
+  line-height: 1.1;
+  margin-top: 0;
+}
+.verdictBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.verdictBadge.positive { color: var(--green); background: var(--green-soft); }
+.verdictBadge.negative { color: var(--red);   background: var(--red-soft); }
+.verdictBadge.neutral  { color: var(--amber); background: var(--amber-soft); }
+.verdictBadge.caution  { color: #c2410c;      background: #fff7ed; }
+
+/* ── 게이지 바 ── */
+.metricGauge {
+  margin-top: 14px;
+}
+.metricGaugeTrack {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: visible;
+}
+.metricGaugeFill {
+  position: absolute;
+  inset: 0;
+  right: auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--red-soft) 0%, var(--amber-soft) 45%, var(--green-soft) 100%);
+  transition: width 0.4s ease;
+}
+.metricGaugeDot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--fg);
+  border: 2px solid var(--surface);
+  transform: translate(-50%, -50%);
+  transition: left 0.4s ease;
+  z-index: 1;
+}
+.metricGaugeZone {
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.metricGaugeLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── 거래량 수급 카드 ── */
+.volumeSection {
+  margin-top: 14px;
+}
+.volumeCard .volumeTitle {
+  font-size: 18px;
+  line-height: 1.2;
+}
+.volumeBars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.volumeRow {
+  display: grid;
+  grid-template-columns: 48px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+}
+.volumeLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-strong);
+}
+.volumeBarWrap {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+.volumeBar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+.volIndividual    { background: var(--blue); }
+.volInstitutional { background: var(--green); }
+.volForeign       { background: var(--amber); }
+.volumePct {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  color: var(--muted-strong);
+}
+.volumeNote {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted-strong);
+  line-height: 1.5;
+}
+
 /* 차트 헤더 우측 (추세필 + 날짜 범위) */
 .chartHeaderRight {
   display: flex;
