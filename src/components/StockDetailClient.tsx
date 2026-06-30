@@ -73,7 +73,7 @@ export function StockDetailClient({ symbol }: StockDetailClientProps) {
           전체 시장으로 돌아가기
         </Link>
         <LoadingState
-          description="Alpha Vantage 가격 데이터와 Google News RSS 응답을 기다리는 중입니다."
+          description="Twelve Data, Alpha Vantage 가격 데이터와 Google News RSS 응답을 기다리는 중입니다."
           title="종목 실데이터를 조회 중입니다"
         />
       </>

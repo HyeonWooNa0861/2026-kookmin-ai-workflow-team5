@@ -5,7 +5,7 @@ type LoadingStateProps = {
 
 export function LoadingState({
   title = "실데이터를 조회 중입니다",
-  description = "FRED, Alpha Vantage, Google News RSS 응답을 기다리는 중입니다."
+  description = "FRED, Twelve Data, Alpha Vantage, Google News RSS 응답을 기다리는 중입니다."
 }: LoadingStateProps) {
   return (
     <section className="loadingState" aria-live="polite">

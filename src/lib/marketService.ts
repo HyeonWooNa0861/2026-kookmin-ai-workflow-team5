@@ -5,6 +5,7 @@ import {
 import { hydrateMarketIndexWithFred } from "./fredClient";
 import { fetchSystematicNews, fetchUnsystematicNews } from "./news";
 import { getStockBySymbol, marketIndex, stocks, type NewsItem, type Stock } from "./mockData";
+import { hydrateStockWithTwelveData, shouldRequestTwelveData } from "./twelveDataClient";
 
 export type DataSource = "live" | "partial";
 
@@ -53,12 +54,29 @@ function highlightsFromNews(news: NewsItem[]) {
 
 async function hydrateStocksSequentially() {
   const hydratedStocks: Stock[] = [];
-  let hasMadeAlphaVantageRequest = false;
+  let hasMadeExternalStockRequest = false;
 
   for (const stock of stocks) {
+    const willRequestTwelveData = shouldRequestTwelveData(stock.symbol);
+
+    if (willRequestTwelveData && hasMadeExternalStockRequest) {
+      await wait(1200);
+    }
+
+    const twelveDataStock = await hydrateStockWithTwelveData(stock);
+
+    if (willRequestTwelveData) {
+      hasMadeExternalStockRequest = true;
+    }
+
+    if (twelveDataStock) {
+      hydratedStocks.push(twelveDataStock);
+      continue;
+    }
+
     const willRequestAlphaVantage = shouldRequestAlphaVantage(stock.symbol);
 
-    if (willRequestAlphaVantage && hasMadeAlphaVantageRequest) {
+    if (willRequestAlphaVantage && hasMadeExternalStockRequest) {
       await wait(1200);
     }
 
@@ -69,7 +87,7 @@ async function hydrateStocksSequentially() {
     }
 
     if (willRequestAlphaVantage) {
-      hasMadeAlphaVantageRequest = true;
+      hasMadeExternalStockRequest = true;
     }
   }
 
@@ -88,7 +106,7 @@ async function attachLiveNews(stock: Stock) {
 
 function messageFromSource(source: DataSource) {
   if (source === "live") {
-    return "FRED/Alpha Vantage/Google News RSS에서 주기적으로 조회한 발표용 데이터입니다.";
+    return "FRED/Twelve Data/Alpha Vantage/Google News RSS에서 주기적으로 조회한 발표용 데이터입니다.";
   }
 
   return "일부 실데이터만 표시 중입니다. 조회에 실패한 항목은 숨겼습니다.";
@@ -129,7 +147,10 @@ export async function getStockPayload(symbol: string): Promise<StockPayload | nu
     return null;
   }
 
-  const liveStock = await hydrateStockWithAlphaVantage(catalogStock);
+  const liveStock =
+    (await hydrateStockWithTwelveData(catalogStock)) ??
+    (await hydrateStockWithAlphaVantage(catalogStock));
+
   if (!liveStock) {
     throw new DataUnavailableError(`${catalogStock.symbol} 가격 데이터를 조회하지 못했습니다.`);
   }
