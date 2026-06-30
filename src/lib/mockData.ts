@@ -39,7 +39,7 @@ export type StockMetricSet = {
 export type Stock = {
   symbol: string;
   name: string;
-  market: "KOSPI" | "KOSDAQ";
+  market: "NASDAQ" | "NYSE";
   sector: string;
   currentPrice: number;
   priceChangePercent: number;
@@ -62,10 +62,10 @@ type ClosePoint = {
 function createCandles(points: ClosePoint[], spread: number): CandlePoint[] {
   return points.map((point, index) => {
     const previousClose =
-      points[index - 1]?.close ?? Math.round(point.close - spread * 0.4);
+      points[index - 1]?.close ?? Number((point.close - spread * 0.4).toFixed(2));
     const open = previousClose;
-    const high = Math.max(open, point.close) + spread;
-    const low = Math.min(open, point.close) - spread;
+    const high = Number((Math.max(open, point.close) + spread).toFixed(2));
+    const low = Number((Math.min(open, point.close) - spread).toFixed(2));
 
     return {
       label: point.label,
@@ -78,345 +78,345 @@ function createCandles(points: ClosePoint[], spread: number): CandlePoint[] {
 }
 
 export const marketIndex = {
-  code: "KOSPI",
-  name: "KOSPI 종합",
-  currentValue: 2784.12,
-  changePercent: 0.84,
+  code: "S&P 500",
+  name: "S&P 500",
+  currentValue: 5487.03,
+  changePercent: 0.42,
   updatedAt: "2026-06-30 09:30",
   summary:
-    "반도체 수출 회복과 환율 안정 기대가 지수에 우호적으로 작용한 데모 데이터입니다.",
+    "AI 인프라 투자와 금리 인하 기대가 대형 기술주 중심의 투자심리를 지지한 데모 데이터입니다.",
   chart: createCandles(
     [
-      { label: "6/17", close: 2714 },
-      { label: "6/18", close: 2721 },
-      { label: "6/19", close: 2708 },
-      { label: "6/20", close: 2738 },
-      { label: "6/23", close: 2756 },
-      { label: "6/24", close: 2749 },
-      { label: "6/25", close: 2768 },
-      { label: "6/26", close: 2772 },
-      { label: "6/27", close: 2761 },
-      { label: "6/30", close: 2784 }
+      { label: "6/17", close: 5412.8 },
+      { label: "6/18", close: 5398.4 },
+      { label: "6/19", close: 5421.2 },
+      { label: "6/20", close: 5448.6 },
+      { label: "6/23", close: 5460.1 },
+      { label: "6/24", close: 5442.7 },
+      { label: "6/25", close: 5471.3 },
+      { label: "6/26", close: 5480.8 },
+      { label: "6/27", close: 5469.5 },
+      { label: "6/30", close: 5487.03 }
     ],
-    9
+    14
   )
 };
 
 export const systematicNews: NewsItem[] = [
   {
     id: "sys-1",
-    title: "수출 회복 기대가 대형 제조주 투자심리를 개선",
-    source: "Mock Market Brief",
+    title: "미국 장기금리 안정 기대가 성장주 부담을 낮춤",
+    source: "Mock Macro Brief",
     date: "2026-06-30",
     sentiment: "positive",
     impact: "호재",
     summary:
-      "반도체와 자동차 수출 회복 기대가 시장 전체의 이익 전망을 끌어올리는 요인으로 해석됩니다.",
-    url: "https://example.com/mock-news/korea-export-rebound"
+      "금리가 급등하지 않는 환경은 미래 이익 비중이 큰 기술주 밸류에이션에 우호적입니다.",
+    url: "https://example.com/mock-news/us-rates-growth"
   },
   {
     id: "sys-2",
-    title: "원/달러 환율 변동성 확대가 외국인 수급 부담으로 작용",
-    source: "Mock Macro Desk",
+    title: "달러 강세는 해외 매출 비중이 큰 기업의 환산 이익 부담",
+    source: "Mock FX Desk",
     date: "2026-06-30",
     sentiment: "negative",
     impact: "악재",
     summary:
-      "환율 변동성이 커지면 외국인 투자자의 매수 강도가 약해질 수 있어 시장 공통 위험으로 분류됩니다.",
-    url: "https://example.com/mock-news/fx-volatility"
+      "미국 대형주는 해외 매출 비중이 높아 달러 강세가 실적 환산에 부담으로 작용할 수 있습니다.",
+    url: "https://example.com/mock-news/us-dollar-risk"
   },
   {
     id: "sys-3",
-    title: "기준금리 동결 전망으로 성장주 할인율 부담 완화",
-    source: "Mock Rate Watch",
+    title: "AI 인프라 투자 확대로 반도체와 클라우드 수요 기대 지속",
+    source: "Mock Tech Watch",
     date: "2026-06-29",
     sentiment: "positive",
     impact: "호재",
     summary:
-      "금리가 급하게 오르지 않을 것이라는 기대는 성장주와 고PER 종목의 부담을 일부 낮춥니다.",
-    url: "https://example.com/mock-news/rate-hold"
+      "데이터센터 투자 증가는 반도체, 클라우드, 소프트웨어 기업에 공통 호재로 분류됩니다.",
+    url: "https://example.com/mock-news/ai-infra-demand"
   }
 ];
 
 export const stocks: Stock[] = [
   {
-    symbol: "005930",
-    name: "삼성전자",
-    market: "KOSPI",
-    sector: "반도체",
-    currentPrice: 78400,
-    priceChangePercent: 1.31,
-    riskScore: 43,
-    volatility: 18,
+    symbol: "AAPL",
+    name: "Apple",
+    market: "NASDAQ",
+    sector: "Consumer Electronics",
+    currentPrice: 214.1,
+    priceChangePercent: 0.62,
+    riskScore: 42,
+    volatility: 19,
     chart: createCandles(
       [
-        { label: "6/17", close: 74600 },
-        { label: "6/18", close: 75200 },
-        { label: "6/19", close: 74800 },
-        { label: "6/20", close: 76000 },
-        { label: "6/23", close: 77100 },
-        { label: "6/24", close: 76600 },
-        { label: "6/25", close: 77500 },
-        { label: "6/26", close: 78100 },
-        { label: "6/27", close: 77400 },
-        { label: "6/30", close: 78400 }
+        { label: "6/17", close: 207.4 },
+        { label: "6/18", close: 208.6 },
+        { label: "6/19", close: 207.9 },
+        { label: "6/20", close: 210.1 },
+        { label: "6/23", close: 211.8 },
+        { label: "6/24", close: 210.7 },
+        { label: "6/25", close: 212.9 },
+        { label: "6/26", close: 213.4 },
+        { label: "6/27", close: 212.8 },
+        { label: "6/30", close: 214.1 }
       ],
-      650
+      1.8
     ),
     metrics: {
       sml: {
-        beta: 1.05,
-        expectedReturn: 8.7,
-        marketReturn: 7.5,
-        riskFreeRate: 3.2,
-        alpha: 0.4
+        beta: 1.12,
+        expectedReturn: 9.1,
+        marketReturn: 7.8,
+        riskFreeRate: 4.3,
+        alpha: 0.2
       },
       per: {
-        value: 18.6,
-        sectorAverage: 21.2
+        value: 29.4,
+        sectorAverage: 31.2
       },
       rsi: {
-        value: 58
+        value: 57
       }
     },
     highlights: {
-      positive: "메모리 가격 회복 기대",
-      negative: "환율과 글로벌 수요 둔화 가능성"
+      positive: "서비스 매출과 자사주 매입",
+      negative: "하드웨어 교체 수요 둔화"
     },
     news: [
       {
-        id: "005930-1",
-        title: "AI 서버 수요 확대가 메모리 업황 개선 기대를 자극",
-        source: "Mock Semiconductor Note",
+        id: "AAPL-1",
+        title: "서비스 매출 비중 확대가 이익 안정성 기대를 높임",
+        source: "Mock US Equity Brief",
         date: "2026-06-30",
         sentiment: "positive",
         impact: "호재",
         summary:
-          "고성능 메모리 수요가 늘면 이익 회복 속도가 빨라질 수 있다는 데모 분석입니다.",
-        url: "https://example.com/mock-news/samsung-memory-ai"
+          "구독과 앱스토어 매출이 늘면 하드웨어 경기 변동의 영향을 일부 줄일 수 있습니다.",
+        url: "https://example.com/mock-news/apple-services"
       },
       {
-        id: "005930-2",
-        title: "스마트폰 교체 수요 회복은 아직 제한적",
+        id: "AAPL-2",
+        title: "스마트폰 교체 주기 장기화는 단기 성장 부담",
         source: "Mock Device Tracker",
         date: "2026-06-29",
         sentiment: "negative",
         impact: "악재",
         summary:
-          "모바일 부문 회복이 느리면 반도체 개선 효과가 일부 상쇄될 수 있습니다.",
-        url: "https://example.com/mock-news/samsung-mobile-demand"
+          "신제품 수요가 예상보다 약하면 매출 성장률과 밸류에이션 부담을 함께 확인해야 합니다.",
+        url: "https://example.com/mock-news/apple-device-demand"
       }
     ]
   },
   {
-    symbol: "005380",
-    name: "현대차",
-    market: "KOSPI",
-    sector: "자동차",
-    currentPrice: 248500,
-    priceChangePercent: -0.42,
-    riskScore: 51,
-    volatility: 22,
+    symbol: "MSFT",
+    name: "Microsoft",
+    market: "NASDAQ",
+    sector: "Cloud Software",
+    currentPrice: 452.3,
+    priceChangePercent: 0.38,
+    riskScore: 39,
+    volatility: 17,
     chart: createCandles(
       [
-        { label: "6/17", close: 242000 },
-        { label: "6/18", close: 244500 },
-        { label: "6/19", close: 247000 },
-        { label: "6/20", close: 251000 },
-        { label: "6/23", close: 253000 },
-        { label: "6/24", close: 250500 },
-        { label: "6/25", close: 249000 },
-        { label: "6/26", close: 252000 },
-        { label: "6/27", close: 249500 },
-        { label: "6/30", close: 248500 }
+        { label: "6/17", close: 441.8 },
+        { label: "6/18", close: 444.1 },
+        { label: "6/19", close: 443.6 },
+        { label: "6/20", close: 446.9 },
+        { label: "6/23", close: 449.5 },
+        { label: "6/24", close: 448.2 },
+        { label: "6/25", close: 450.8 },
+        { label: "6/26", close: 453.1 },
+        { label: "6/27", close: 450.6 },
+        { label: "6/30", close: 452.3 }
       ],
-      2100
+      3.6
     ),
     metrics: {
       sml: {
-        beta: 1.18,
-        expectedReturn: 9.4,
-        marketReturn: 7.5,
-        riskFreeRate: 3.2,
-        alpha: -0.2
+        beta: 0.96,
+        expectedReturn: 8.1,
+        marketReturn: 7.8,
+        riskFreeRate: 4.3,
+        alpha: 0.5
       },
       per: {
-        value: 6.4,
-        sectorAverage: 8.1
+        value: 34.8,
+        sectorAverage: 36.4
       },
       rsi: {
-        value: 49
+        value: 61
       }
     },
     highlights: {
-      positive: "낮은 PER과 수출 경쟁력",
-      negative: "전기차 수요 둔화 우려"
+      positive: "클라우드와 AI 소프트웨어 수요",
+      negative: "높은 기대치에 따른 실적 민감도"
     },
     news: [
       {
-        id: "005380-1",
-        title: "하이브리드 판매 호조가 이익 방어 요인으로 부각",
-        source: "Mock Auto Brief",
+        id: "MSFT-1",
+        title: "클라우드 AI 수요가 장기 성장 기대를 지지",
+        source: "Mock Cloud Note",
         date: "2026-06-30",
         sentiment: "positive",
         impact: "호재",
         summary:
-          "전기차 성장 둔화 구간에서 하이브리드 판매가 실적 안정성을 높일 수 있습니다.",
-        url: "https://example.com/mock-news/hyundai-hybrid-sales"
+          "기업용 클라우드와 AI 기능 판매가 함께 늘면 반복 매출 기반이 강화됩니다.",
+        url: "https://example.com/mock-news/microsoft-cloud-ai"
       },
       {
-        id: "005380-2",
-        title: "미국 전기차 보조금 정책 변화 가능성은 부담",
-        source: "Mock Policy Watch",
+        id: "MSFT-2",
+        title: "AI 인프라 투자 비용 증가는 마진 확인 요인",
+        source: "Mock Margin Watch",
         date: "2026-06-28",
         sentiment: "negative",
         impact: "악재",
         summary:
-          "정책 변화는 해외 판매 전략과 마진에 영향을 줄 수 있는 개별 종목 위험입니다.",
-        url: "https://example.com/mock-news/hyundai-ev-policy"
+          "데이터센터 투자가 빨라질수록 매출 성장과 비용 증가의 균형을 확인해야 합니다.",
+        url: "https://example.com/mock-news/microsoft-ai-capex"
       }
     ]
   },
   {
-    symbol: "035420",
-    name: "NAVER",
-    market: "KOSPI",
-    sector: "인터넷",
-    currentPrice: 192300,
-    priceChangePercent: 0.26,
-    riskScore: 57,
-    volatility: 27,
+    symbol: "NVDA",
+    name: "NVIDIA",
+    market: "NASDAQ",
+    sector: "Semiconductors",
+    currentPrice: 126.7,
+    priceChangePercent: 1.46,
+    riskScore: 61,
+    volatility: 32,
     chart: createCandles(
       [
-        { label: "6/17", close: 184000 },
-        { label: "6/18", close: 186500 },
-        { label: "6/19", close: 185800 },
-        { label: "6/20", close: 188500 },
-        { label: "6/23", close: 190200 },
-        { label: "6/24", close: 191000 },
-        { label: "6/25", close: 189400 },
-        { label: "6/26", close: 193000 },
-        { label: "6/27", close: 191800 },
-        { label: "6/30", close: 192300 }
+        { label: "6/17", close: 119.8 },
+        { label: "6/18", close: 121.6 },
+        { label: "6/19", close: 120.9 },
+        { label: "6/20", close: 123.2 },
+        { label: "6/23", close: 125.9 },
+        { label: "6/24", close: 124.1 },
+        { label: "6/25", close: 127.4 },
+        { label: "6/26", close: 128.2 },
+        { label: "6/27", close: 124.9 },
+        { label: "6/30", close: 126.7 }
       ],
-      1700
+      2.4
     ),
     metrics: {
       sml: {
-        beta: 1.32,
-        expectedReturn: 10.1,
-        marketReturn: 7.5,
-        riskFreeRate: 3.2,
-        alpha: 0.1
+        beta: 1.72,
+        expectedReturn: 12.4,
+        marketReturn: 7.8,
+        riskFreeRate: 4.3,
+        alpha: 0.7
       },
       per: {
-        value: 28.8,
-        sectorAverage: 24.5
+        value: 42.5,
+        sectorAverage: 35.7
       },
       rsi: {
-        value: 63
+        value: 66
       }
     },
     highlights: {
-      positive: "AI 검색과 광고 회복 기대",
-      negative: "높은 밸류에이션 부담"
+      positive: "AI 가속기 수요와 데이터센터 성장",
+      negative: "높은 변동성과 밸류에이션 부담"
     },
     news: [
       {
-        id: "035420-1",
-        title: "AI 검색 서비스 고도화가 광고 단가 개선 기대를 형성",
-        source: "Mock Platform Note",
+        id: "NVDA-1",
+        title: "데이터센터 GPU 수요가 실적 기대를 견인",
+        source: "Mock Semiconductor Note",
         date: "2026-06-30",
         sentiment: "positive",
         impact: "호재",
         summary:
-          "검색 체류시간이 늘면 광고 효율과 커머스 전환율에 긍정적일 수 있습니다.",
-        url: "https://example.com/mock-news/naver-ai-search"
+          "AI 학습과 추론 수요가 늘면 고성능 GPU 매출 기대가 높아질 수 있습니다.",
+        url: "https://example.com/mock-news/nvidia-datacenter"
       },
       {
-        id: "035420-2",
-        title: "플랫폼 규제 논의는 성장주 할인 요인",
-        source: "Mock Regulation Desk",
+        id: "NVDA-2",
+        title: "공급망과 고객 집중도는 변동성 요인",
+        source: "Mock Supply Watch",
         date: "2026-06-29",
         sentiment: "negative",
         impact: "악재",
         summary:
-          "수수료와 데이터 활용 규제가 강화되면 플랫폼 사업의 이익률이 압박받을 수 있습니다.",
-        url: "https://example.com/mock-news/naver-platform-regulation"
+          "대형 고객의 주문 변화나 공급 차질은 고성장 종목의 주가 변동성을 키울 수 있습니다.",
+        url: "https://example.com/mock-news/nvidia-supply-risk"
       }
     ]
   },
   {
-    symbol: "068270",
-    name: "셀트리온",
-    market: "KOSPI",
-    sector: "바이오",
-    currentPrice: 184700,
-    priceChangePercent: -1.08,
-    riskScore: 68,
-    volatility: 34,
+    symbol: "TSLA",
+    name: "Tesla",
+    market: "NASDAQ",
+    sector: "Electric Vehicles",
+    currentPrice: 189.4,
+    priceChangePercent: -0.84,
+    riskScore: 70,
+    volatility: 38,
     chart: createCandles(
       [
-        { label: "6/17", close: 191000 },
-        { label: "6/18", close: 188500 },
-        { label: "6/19", close: 190200 },
-        { label: "6/20", close: 189000 },
-        { label: "6/23", close: 186500 },
-        { label: "6/24", close: 185300 },
-        { label: "6/25", close: 187600 },
-        { label: "6/26", close: 186800 },
-        { label: "6/27", close: 185900 },
-        { label: "6/30", close: 184700 }
+        { label: "6/17", close: 198.2 },
+        { label: "6/18", close: 195.4 },
+        { label: "6/19", close: 193.8 },
+        { label: "6/20", close: 196.1 },
+        { label: "6/23", close: 192.5 },
+        { label: "6/24", close: 190.7 },
+        { label: "6/25", close: 193.2 },
+        { label: "6/26", close: 191.8 },
+        { label: "6/27", close: 190.1 },
+        { label: "6/30", close: 189.4 }
       ],
-      1900
+      4.1
     ),
     metrics: {
       sml: {
-        beta: 1.41,
-        expectedReturn: 10.8,
-        marketReturn: 7.5,
-        riskFreeRate: 3.2,
-        alpha: -0.6
+        beta: 2.05,
+        expectedReturn: 14.1,
+        marketReturn: 7.8,
+        riskFreeRate: 4.3,
+        alpha: -0.5
       },
       per: {
-        value: 36.2,
-        sectorAverage: 32.7
+        value: 58.3,
+        sectorAverage: 24.6
       },
       rsi: {
-        value: 38
+        value: 41
       }
     },
     highlights: {
-      positive: "바이오시밀러 포트폴리오 확대",
-      negative: "임상과 허가 일정 변동성"
+      positive: "자율주행과 에너지 사업 기대",
+      negative: "전기차 가격 경쟁과 높은 변동성"
     },
     news: [
       {
-        id: "068270-1",
-        title: "신규 바이오시밀러 판매 지역 확대 기대",
-        source: "Mock Bio Brief",
+        id: "TSLA-1",
+        title: "자율주행 소프트웨어 기대가 장기 성장 서사를 지지",
+        source: "Mock Auto Tech Brief",
         date: "2026-06-30",
         sentiment: "positive",
         impact: "호재",
         summary:
-          "판매 지역이 늘면 매출 기반이 넓어질 수 있지만 초기 비용도 함께 확인해야 합니다.",
-        url: "https://example.com/mock-news/celltrion-biosimilar"
+          "소프트웨어 매출이 확대되면 자동차 제조 마진 의존도를 낮출 수 있습니다.",
+        url: "https://example.com/mock-news/tesla-autonomy"
       },
       {
-        id: "068270-2",
-        title: "임상 일정 지연 가능성이 투자심리 부담",
-        source: "Mock Healthcare Watch",
+        id: "TSLA-2",
+        title: "전기차 가격 경쟁은 단기 마진 부담",
+        source: "Mock EV Watch",
         date: "2026-06-28",
         sentiment: "negative",
         impact: "악재",
         summary:
-          "바이오 업종은 허가와 임상 일정 변화에 따라 주가 변동성이 커질 수 있습니다.",
-        url: "https://example.com/mock-news/celltrion-clinical-delay"
+          "판매량 방어를 위한 가격 인하는 매출 성장에도 이익률을 압박할 수 있습니다.",
+        url: "https://example.com/mock-news/tesla-price-competition"
       }
     ]
   }
 ];
 
 export function getStockBySymbol(symbol: string) {
-  return stocks.find((stock) => stock.symbol === symbol);
+  return stocks.find((stock) => stock.symbol === symbol.toUpperCase());
 }

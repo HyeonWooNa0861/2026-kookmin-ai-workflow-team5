@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Stock } from "@/lib/mockData";
-import { formatKRW, formatPercent, statusClass } from "@/lib/format";
+import { formatPercent, formatUSD, statusClass } from "@/lib/format";
 import { createRecommendation } from "@/lib/recommendation";
 
 type StockCardProps = {
@@ -25,7 +25,7 @@ export function StockCard({ stock }: StockCardProps) {
       </div>
 
       <div className="stockPriceLine">
-        <strong>{formatKRW(stock.currentPrice)}</strong>
+        <strong>{formatUSD(stock.currentPrice)}</strong>
         <span className={changeClass}>{formatPercent(stock.priceChangePercent)}</span>
       </div>
 
